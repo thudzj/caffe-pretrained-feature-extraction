@@ -37,7 +37,7 @@ def run_googlenet():
     googlenet = fe.CaffeFeatureExtractor(
             model_path="googlenet_deploy.prototxt",
             pretrained_path="googlenet.caffemodel",
-            blob="pool5/7x7_s1",
+            blob="inception_5b/output",
             crop_size=224,
             mean_values=[104.0, 117.0, 123.0]
             )
@@ -45,7 +45,7 @@ def run_googlenet():
     fe.create_dataset(net=googlenet, datalist="test.txt", dbprefix="googlenet_test")
 
 if __name__ == "__main__":
-    run_alexnet()
-    run_vgg16_fc7()
-    run_vgg16_fc6()
+    #run_alexnet()
+    #run_vgg16_fc7()
+    #run_vgg16_fc6()
     run_googlenet()

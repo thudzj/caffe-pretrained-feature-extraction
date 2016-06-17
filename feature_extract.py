@@ -33,6 +33,7 @@ class CaffeFeatureExtractor:
             raise Exception
         # create preprocessor
         # Note: caffe.io.load_image() => (H,W,C), RGB, [0.0, 1.0]
+	print self.net.blobs["data"].data.shape
         self.transformer = caffe.io.Transformer({"data": self.net.blobs["data"].data.shape}) # for cropping
         self.transformer.set_transpose("data", (2,0,1)) # (H,W,C) => (C,H,W)
         self.transformer.set_mean("data", self.mean) # subtract by mean
@@ -41,9 +42,9 @@ class CaffeFeatureExtractor:
 
     def extract_feature(self, img):
         preprocessed_img = self.transformer.preprocess("data", img)
-        out = self.net.forward_all(**{self.net.inputs[0]: preprocessed_img, "blobs": [self.blob]})
+	out = self.net.forward_all(**{"data": preprocessed_img.reshape(1,3,224,224), "blobs": [self.blob]})
         feat = out[self.blob]
-        feat = feat[0] 
+	#print feat.shape
         return feat
 
     def crop_matrix(self, matrix, crop_size):
